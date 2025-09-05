@@ -1,0 +1,16 @@
+-- project.user_data definition
+
+-- Drop table
+
+-- DROP TABLE project.user_data;
+
+CREATE TABLE project.user_data (
+	username varchar NOT NULL,
+	password_encrypted varchar NOT NULL,
+	id varchar DEFAULT nextval('project.user_id_seq'::regclass) NOT NULL,
+	create_date timestamp NULL,
+	create_by varchar NULL,
+	update_date timestamp NULL,
+	update_by varchar NULL,
+	CONSTRAINT user_pk PRIMARY KEY (id)
+);

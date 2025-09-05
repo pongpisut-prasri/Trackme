@@ -1,0 +1,24 @@
+-- project.user_nutrition_logs definition
+
+-- Drop table
+
+-- DROP TABLE project.user_nutrition_logs;
+
+CREATE TABLE project.user_nutrition_logs (
+	proteins numeric NOT NULL,
+	fats numeric NOT NULL,
+	carbohydrates numeric NOT NULL,
+	calories numeric NOT NULL,
+	log_date timestamp NOT NULL,
+	create_by varchar NULL,
+	update_by varchar NULL,
+	update_date timestamp NULL,
+	create_date timestamp NULL,
+	id varchar NOT NULL,
+	notes varchar NULL,
+	user_id varchar NOT NULL,
+	food_name varchar NULL,
+	CONSTRAINT user_nutrition_logs_pk PRIMARY KEY (id)
+);
+CREATE INDEX unl_log_date_idx ON project.user_nutrition_logs USING btree (log_date);
+CREATE INDEX user_id_idx ON project.user_nutrition_logs USING btree (user_id);

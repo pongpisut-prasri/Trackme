@@ -1,0 +1,18 @@
+-- project.user_body_logs definition
+
+-- Drop table
+
+-- DROP TABLE project.user_body_logs;
+
+CREATE TABLE project.user_body_logs (
+	user_id varchar NOT NULL,
+	weight_kg numeric NOT NULL,
+	body_fat_percent numeric NOT NULL,
+	measured_at timestamp NOT NULL,
+	id varchar NOT NULL,
+	create_by varchar NULL,
+	update_by varchar NULL,
+	update_date timestamp NULL,
+	create_date timestamp NULL,
+	CONSTRAINT user_body_logs_pk PRIMARY KEY (id)
+);

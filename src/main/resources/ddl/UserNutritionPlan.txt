@@ -1,0 +1,22 @@
+-- project.user_nutrition_plan definition
+
+-- Drop table
+
+-- DROP TABLE project.user_nutrition_plan;
+
+CREATE TABLE project.user_nutrition_plan (
+	proteins numeric NOT NULL,
+	fats numeric NOT NULL,
+	carbohydrates numeric NOT NULL,
+	calories numeric NOT NULL,
+	log_date timestamp NOT NULL,
+	create_by varchar NULL,
+	update_by varchar NULL,
+	update_date date NULL,
+	create_date date NULL,
+	notes varchar NULL,
+	user_id varchar NOT NULL,
+	id varchar NOT NULL,
+	CONSTRAINT user_nutrition_plan_pk PRIMARY KEY (id)
+);
+CREATE INDEX unp_user_id_idx ON project.user_nutrition_plan USING btree (user_id);
