@@ -33,4 +33,7 @@ public class UserModel extends BaseEntity {
     @Column(name = "password_encrypted")
     private String passwordEncrypted;
 
+    @Column(name = "subscription_type")
+    private String subscriptionType;
+
 }
