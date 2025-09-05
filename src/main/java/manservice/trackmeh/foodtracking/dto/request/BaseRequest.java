@@ -9,4 +9,5 @@ import lombok.Setter;
 @Setter
 public class BaseRequest implements Serializable{
     private long id;
+    private String userId;
 }
