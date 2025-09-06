@@ -17,6 +17,7 @@ import manservice.trackmeh.foodtracking.dto.request.NutritionPlanReq;
 import manservice.trackmeh.foodtracking.dto.request.WeightLoggingReq;
 import manservice.trackmeh.foodtracking.dto.response.BaseResponse;
 import manservice.trackmeh.foodtracking.service.UserNutritionService;
+import manservice.trackmeh.utils.Constant.HTTP_RESPONSE;
 
 @Log4j2
 @RestController
@@ -35,7 +36,7 @@ public class NutritionController {
             log.error(e, e);
             return ResponseEntity.badRequest().body(BaseResponse
                     .builder()
-                    .httpStatusCode("400")
+                    .httpStatusCode(HTTP_RESPONSE.BAD_REQUEST.code())
                     .description(e.getMessage()).build());
         }
 
@@ -50,7 +51,7 @@ public class NutritionController {
             log.error(e, e);
             return ResponseEntity.badRequest().body(BaseResponse
                     .builder()
-                    .httpStatusCode("400")
+                    .httpStatusCode(HTTP_RESPONSE.BAD_REQUEST.code())
                     .description(e.getMessage()).build());
         }
 
@@ -65,7 +66,7 @@ public class NutritionController {
             log.error(e, e);
             return ResponseEntity.badRequest().body(BaseResponse
                     .builder()
-                    .httpStatusCode("400")
+                    .httpStatusCode(HTTP_RESPONSE.BAD_REQUEST.code())
                     .description(e.getMessage()).build());
         }
 
