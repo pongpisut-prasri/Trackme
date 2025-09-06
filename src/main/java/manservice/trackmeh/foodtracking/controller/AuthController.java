@@ -96,12 +96,17 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody UserReq req) throws JsonProcessingException {
         // TODO: process POST request
         try {
-            // go to UserDetailServiceImpl.loadByUsername
+            // go to UserDetailServiceImpl.loadByUsername and compare data between request
+            // and data from database
+            // username and password(encryptedByPasswordEncoder) must be the same value
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.getUsername(),
                             req.getPassword()));
+            // ทำให้ spring secure รู้ว่า user นี้ authenticated แล้ว
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Object jwt = jwtUtil.generateJwtToken(authentication);
+
+            // authentication = UserDetailServiceImpl.loadByUsername after compare result line 103
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return ResponseEntity.ok(new JwtModel(jwt,
                     userDetails.getUserModel().getId(),
