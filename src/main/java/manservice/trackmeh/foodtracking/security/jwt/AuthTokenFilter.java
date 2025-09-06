@@ -55,20 +55,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        UsernamePasswordAuthenticationToken authentication = null;
-        // CachedBodyHttpServletRequest wrappedRequest = new
-        // CachedBodyHttpServletRequest(request);
-        // String body = new String(wrappedRequest.getInputStream()); // Here you can
-        // use the body as needed
-        // String clone = StreamUtils.copyToString(httpRequest.getInputStream(),
-        // StandardCharsets.UTF_8);
-
-        // ServletInputStream body = cachedRequest.getInputStream(); // Get cached
-        // request body
-        // JsonNode node = new ObjectMapper().readTree(body);
-        // HashMap jsonBody = objectMapper.readValue(cachedRequest.getInputStream(),
-        // HashMap.class);
-   
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        // * set authorized 
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
