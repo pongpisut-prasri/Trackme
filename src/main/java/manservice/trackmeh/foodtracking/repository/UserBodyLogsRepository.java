@@ -14,7 +14,8 @@ import manservice.trackmeh.foodtracking.entity.UserBodyLogs;
 public interface UserBodyLogsRepository extends JpaRepository<UserBodyLogs, String> {
 
     @Query(value = """
-            select ubl.weight_kg  as weight, ubl.measured_at as log_date from project.user_body_logs ubl
+            select ubl.weight_kg  as weight, ubl.measured_at as log_date ,TO_CHAR(ubl.measured_at, 'Day') AS day_name
+            from project.user_body_logs ubl
             where ubl.user_id =?1 and ubl.measured_at between ?2 and  ?3
             order by log_date
                         """, nativeQuery = true)
@@ -22,8 +23,8 @@ public interface UserBodyLogsRepository extends JpaRepository<UserBodyLogs, Stri
 
     interface WeightLogResp {
         LocalDate getLogDate();
-
         BigDecimal getWeight();
+        String getDayName();
     }
 
 }
