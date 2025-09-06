@@ -1,11 +1,29 @@
 package manservice.trackmeh.foodtracking.repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import manservice.trackmeh.foodtracking.entity.UserBodyLogs;
 
 @Repository
 public interface UserBodyLogsRepository extends JpaRepository<UserBodyLogs, String> {
+
+    @Query(value = """
+            select ubl.weight_kg  as weight, ubl.measured_at as log_date from project.user_body_logs ubl
+            where ubl.user_id =?1 and ubl.measured_at between ?2 and  ?3
+            order by log_date
+                        """, nativeQuery = true)
+    List<WeightLogResp> getLogsInRangeDate(String userId, LocalDate startDate, LocalDate endDate);
+
+    interface WeightLogResp {
+        LocalDate getLogDate();
+
+        BigDecimal getWeight();
+    }
 
 }

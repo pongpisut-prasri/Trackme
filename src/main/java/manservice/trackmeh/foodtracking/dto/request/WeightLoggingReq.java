@@ -12,4 +12,11 @@ public class WeightLoggingReq extends BaseRequest {
     private LocalDate date;
     private BigDecimal weightKg;
     private BigDecimal bodyFatPercent;
+
+    @Getter
+    @Setter
+    public static class WeightLogListByDateReq extends BaseRequest{
+        private LocalDate startDate;
+        private LocalDate endDate;
+    }
 }
