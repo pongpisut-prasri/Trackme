@@ -68,6 +68,8 @@ public class PermissionServiceImpl implements PermissionService {
                 List<String> permissionList = Arrays.asList(permissionsString.split(",\\s*"));
                 permission.setPermission(permissionList);
             }
+            permission.setCreateBy("ADMIN");
+            permission.setCreateDate(LocalDateTime.now());
             
             permissions.add(permission);
         }
