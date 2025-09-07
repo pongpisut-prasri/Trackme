@@ -1,0 +1,16 @@
+-- project.permissions definition
+
+-- Drop table
+
+-- DROP TABLE project.permissions;
+
+CREATE TABLE project.permissions (
+	id varchar(255) NOT NULL,
+	create_by varchar(255) NULL,
+	create_date timestamp(6) NULL,
+	update_by varchar(255) NULL,
+	update_date timestamp(6) NULL,
+	"permission" _varchar NOT NULL,
+	subscription_type varchar(255) NOT NULL,
+	CONSTRAINT permissions_pkey PRIMARY KEY (id)
+);
