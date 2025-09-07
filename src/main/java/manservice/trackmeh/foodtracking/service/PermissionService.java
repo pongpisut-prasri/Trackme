@@ -12,5 +12,5 @@ import manservice.trackmeh.foodtracking.entity.Permission;
 public interface PermissionService {
     public BaseResponse CreatePermission(PermissionReq req);
 
-    public List<Permission> importFromExcel(MultipartFile file) throws IOException;
+    public BaseResponse importFromExcel(MultipartFile file) throws IOException;
 }

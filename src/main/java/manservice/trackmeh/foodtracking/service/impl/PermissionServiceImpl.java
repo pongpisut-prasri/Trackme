@@ -38,7 +38,7 @@ public class PermissionServiceImpl implements PermissionService {
         return new BaseResponse();
     }
 
-     public List<Permission> importFromExcel(MultipartFile file) throws IOException {
+     public BaseResponse importFromExcel(MultipartFile file) throws IOException {
         List<Permission> permissions = new ArrayList<>();
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -73,7 +73,8 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         workbook.close();
-        return permissions;
+        permissionRepository.saveAll(permissions);
+        return new BaseResponse();
     }
     
     private boolean isRowEmpty(Row row) {
