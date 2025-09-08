@@ -2,7 +2,11 @@ package manservice.trackmeh.foodtracking.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,6 +29,21 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
             group by unl.user_id,unl.log_date::date,ubl.weight_kg""", nativeQuery = true)
     UserNutritionGroupByUserAndLogDate getDailySummary(String userId, LocalDate date);
 
+    @Query(value = """
+            select
+                unl.id ,
+                unl.food_name,
+                unl.calories,
+                unl.proteins,
+                unl.carbohydrates,
+                unl.fats,
+                unl.log_date
+            from project.user_nutrition_logs unl
+            where unl.user_id =?1
+            order by unl.log_date
+            """, nativeQuery = true)
+    Page<UserNutritionPaginationResp> getLogsPagination(String userId, Pageable pageable);
+
     interface UserNutritionGroupByUserAndLogDate {
         BigDecimal getTotalCalories();
 
@@ -37,5 +56,21 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
         String getUserId();
 
         BigDecimal getWeight();
+    }
+
+    interface UserNutritionPaginationResp {
+        String getId();
+
+        String getFoodName();
+
+        BigDecimal getProteins();
+
+        BigDecimal getCarbohydrates();
+
+        BigDecimal getFats();
+
+        BigDecimal getCalories();
+
+        LocalDate getLogDate();
     }
 }

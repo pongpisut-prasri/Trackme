@@ -10,10 +10,13 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.SneakyThrows;
+import manservice.trackmeh.foodtracking.dto.request.BasePaginationReq;
 import manservice.trackmeh.foodtracking.dto.request.NutritionLogsReq;
 import manservice.trackmeh.foodtracking.dto.request.NutritionPlanReq;
 import manservice.trackmeh.foodtracking.dto.response.BaseResponse;
@@ -98,7 +101,8 @@ public class UserNutritionServiceImpl implements UserNutritionService {
     @Override
     @SneakyThrows
     public BaseResponse nutritionPlanSetup(NutritionPlanReq req) {
-        UserNutritionPlan userNutritionPlan = userNutritionPlanRepository.findByUserId(Optional.ofNullable(req.getUserId()).orElse(""));
+        UserNutritionPlan userNutritionPlan = userNutritionPlanRepository
+                .findByUserId(Optional.ofNullable(req.getUserId()).orElse(""));
         if (userNutritionPlan == null) {
             userNutritionPlan = new UserNutritionPlan();
             BeanUtils.copyProperties(req, userNutritionPlan);
@@ -119,6 +123,13 @@ public class UserNutritionServiceImpl implements UserNutritionService {
         BigDecimal carbohydrateCalories = carbohydrate.multiply(BigDecimal.valueOf(4));
         BigDecimal fatCalories = fats.multiply(BigDecimal.valueOf(9));
         return (proteinCalories.add(carbohydrateCalories).add(fatCalories)).setScale(4, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BaseResponse getLogsPagination(BasePaginationReq req) {
+        Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
+        return new BaseResponse(userNutritionLogsRepository.getLogsPagination(req.getUserId(), pageable));
     }
 
 }

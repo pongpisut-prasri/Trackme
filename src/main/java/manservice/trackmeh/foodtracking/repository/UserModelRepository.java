@@ -1,5 +1,6 @@
 package manservice.trackmeh.foodtracking.repository;
 
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,5 @@ public interface UserModelRepository extends JpaRepository<UserModel, String> {
             where username = ?1
             """, nativeQuery = true)
     UserModel findByUserName(String username);
+
 }
