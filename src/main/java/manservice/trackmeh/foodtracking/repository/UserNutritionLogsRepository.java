@@ -17,16 +17,22 @@ import manservice.trackmeh.foodtracking.entity.UserNutritionLogs;
 public interface UserNutritionLogsRepository extends JpaRepository<UserNutritionLogs, String> {
 
     @Query(value = """
-               select unl.user_id  ,
-            	SUM(unl.proteins) AS total_proteins,
-            	SUM(unl.carbohydrates ) AS total_carbohydrates,
-            	SUM(unl.fats ) AS total_fats,
-                SUM(unl.calories ) AS total_calories,
-                ubl.weight_kg AS weight
-            from project.user_nutrition_logs unl
-            inner join project.user_body_logs ubl on unl.user_id = ubl.user_id
-            where unl.user_id = ?1 and unl.log_date::date = ?2 and ubl.measured_at::date = ?2
-            group by unl.user_id,unl.log_date::date,ubl.weight_kg""", nativeQuery = true)
+            with body_Logs_latest as (
+            	select * from project.user_body_logs ubl
+            	where ubl.measured_at::date <= ?2 and ubl.user_id =?1
+            	order by ubl.measured_at desc
+            	limit 1
+            )
+             select unl.user_id  ,
+                       	SUM(unl.proteins) AS total_proteins,
+                       	SUM(unl.carbohydrates ) AS total_carbohydrates,
+                       	SUM(unl.fats ) AS total_fats,
+                           SUM(unl.calories ) AS total_calories,
+                           ubl.weight_kg AS weight
+                       from project.user_nutrition_logs unl
+                       inner join body_Logs_latest ubl on unl.user_id = ubl.user_id
+                       where unl.user_id = ?1 and unl.log_date::date = ?2
+                       group by unl.user_id,unl.log_date::date,ubl.weight_kg""", nativeQuery = true)
     UserNutritionGroupByUserAndLogDate getDailySummary(String userId, LocalDate date);
 
     @Query(value = """
