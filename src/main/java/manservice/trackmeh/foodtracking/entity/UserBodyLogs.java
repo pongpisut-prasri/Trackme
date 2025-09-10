@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -22,7 +23,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user_body_logs")
+@Table(name = "user_body_logs", indexes = {
+        @Index(name = "ubl_user_id_idx", columnList = "user_id"),
+        @Index(name = "ubl_measured_at_idx", columnList = "measured_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor

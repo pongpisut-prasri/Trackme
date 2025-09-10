@@ -9,8 +9,6 @@ import org.hibernate.annotations.NotFoundAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +21,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -31,16 +28,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user_nutrition_plan"
-// uniqueConstraints = {
-// @UniqueConstraint(name = "uq_user_nutrition_target_date", columnNames = {
-// "user_id", "target_date" })
-// },
-// indexes = {
-// @Index(name = "idx_user_nutrition_user", columnList = "user_id"),
-// // @Index(name = "idx_user_nutrition_date", columnList = "target_date")
-// }
-)
+@Table(name = "user_nutrition_plan", indexes = {
+        @Index(name = "unp_user_id_idx", columnList = "user_id"),
+})
 public class UserNutritionPlan extends BaseEntity {
 
     @Id

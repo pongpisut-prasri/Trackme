@@ -14,6 +14,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -28,7 +29,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_nutrition_logs")
+@Table(name = "user_nutrition_logs",indexes = {
+        @Index(name = "unl_log_date_idx", columnList = "log_date"),
+        @Index(name = "user_id_idx", columnList = "user_id"),
+        @Index(name = "unl_food_name", columnList = "food_name"),
+})
 public class UserNutritionLogs extends BaseEntity {
 
     @Id
