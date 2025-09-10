@@ -17,24 +17,6 @@ import manservice.trackmeh.foodtracking.entity.UserNutritionLogs;
 public interface UserNutritionLogsRepository extends JpaRepository<UserNutritionLogs, String> {
 
     @Query(value = """
-            select unl.user_id  ,
-                  	SUM(unl.proteins) AS total_proteins,
-                  	SUM(unl.carbohydrates ) AS total_carbohydrates,
-                  	SUM(unl.fats ) AS total_fats,
-                      SUM(unl.calories ) AS total_calories,
-                      ubl.weight_kg AS weight
-                  from project.user_nutrition_logs unl
-                  inner join project.user_body_logs ubl on unl.user_id = ubl.user_id
-                  where unl.user_id = '1' and (
-                  	 	select * from project.user_body_logs ubl
-                        where ubl.measured_at::date <= Date '2025-09-08' and ubl.user_id ='1'
-                        order by ubl.measured_at desc
-                        limit 1
-                  )
-                  group by unl.user_id,unl.log_date::date,ubl.weight_kg""", nativeQuery = true)
-    UserNutritionGroupByUserAndLogDate getDailySummarySubQuery(String userId, LocalDate date);
-
-    @Query(value = """
             with body_Logs_latest as (
             	select * from project.user_body_logs ubl
             	where ubl.measured_at::date <= ?2 and ubl.user_id =?1
