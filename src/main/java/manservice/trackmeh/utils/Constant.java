@@ -1,6 +1,12 @@
 package manservice.trackmeh.utils;
+
+import org.apache.poi.ss.usermodel.CellType;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 public class Constant {
-            public enum HTTP_RESPONSE {
+        public enum HTTP_RESPONSE {
                 CONTINUE("100", "CONTINUE", "Continue processing the request", "ดำเนินการต่อ"),
                 SWITCHING_PROTOCOLS("101", "SWITCHING_PROTOCOLS", "Switching to a different protocol",
                                 "กำลังเปลี่ยนไปใช้โปรโตคอลอื่น"),
@@ -188,5 +194,20 @@ public class Constant {
                 public String detailTH() {
                         return detailTH;
                 }
+        }
+
+        @Getter
+        @AllArgsConstructor
+        public enum INGREDIENT_CELL {
+                INGREDIENT_NAME(1, "วัตถุดิบ", "INGREDIENT", CellType.STRING),
+                INGREDIENT_NAME_EN(1, "วัตถุดิบ (EN)", "INGREDIENT_EN", CellType.STRING),
+                PROTEIN(2, "โปรตีน", "PROTEIN", CellType.STRING),
+                CARBOHYDRATE(3, "คาร์โบไฮเดรต", "CARBOHYDRATE", CellType.STRING),
+                FAT(4, "ไขมัน", "INGREDIFATENT", CellType.STRING);
+
+                private Integer index;
+                private String cellName;
+                private String code;
+                private CellType celltype;
         }
 }
