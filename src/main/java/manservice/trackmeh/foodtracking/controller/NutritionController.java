@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import manservice.trackmeh.foodtracking.dto.request.BasePaginationReq;
+import manservice.trackmeh.foodtracking.dto.request.BaseRequest;
 import manservice.trackmeh.foodtracking.dto.request.NutritionLogsReq;
 import manservice.trackmeh.foodtracking.dto.request.NutritionPlanReq;
+import manservice.trackmeh.foodtracking.dto.request.UserSummaryPaginationReq;
 import manservice.trackmeh.foodtracking.dto.request.WeightLoggingReq;
 import manservice.trackmeh.foodtracking.dto.response.BaseResponse;
 import manservice.trackmeh.foodtracking.service.UserNutritionService;
@@ -82,6 +84,36 @@ public class NutritionController {
             @RequestBody BasePaginationReq req) {
         try {
             return ResponseEntity.ok().body(userNutritionService.getLogsPagination(req));
+        } catch (Exception e) {
+            log.error(e, e);
+            return ResponseEntity.badRequest().body(BaseResponse
+                    .builder()
+                    .httpStatusCode(HTTP_RESPONSE.BAD_REQUEST.code())
+                    .description(e.getMessage()).build());
+        }
+
+    }
+
+    @PostMapping("/getSummaryByRangeDate")
+    public ResponseEntity<?> getSummaryByRangeDate(@RequestHeader("Authorization") String token,
+            @RequestBody UserSummaryPaginationReq req) {
+        try {
+            return ResponseEntity.ok().body(userNutritionService.getSummaryByRangeDate(req));
+        } catch (Exception e) {
+            log.error(e, e);
+            return ResponseEntity.badRequest().body(BaseResponse
+                    .builder()
+                    .httpStatusCode(HTTP_RESPONSE.BAD_REQUEST.code())
+                    .description(e.getMessage()).build());
+        }
+
+    }
+
+    @PostMapping("/getWeeklySummary")
+    public ResponseEntity<?> getWeeklySummary(@RequestHeader("Authorization") String token,
+            @RequestBody BaseRequest req) {
+        try {
+            return ResponseEntity.ok().body(userNutritionService.getWeeklySummary(req));
         } catch (Exception e) {
             log.error(e, e);
             return ResponseEntity.badRequest().body(BaseResponse

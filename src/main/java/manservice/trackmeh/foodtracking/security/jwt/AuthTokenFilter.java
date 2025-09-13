@@ -49,8 +49,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       String jwt = parseJwt(cachedRequest);
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        // UserToken userTokenDetail = jwtUtils.getUserTokenDetailFromTokenForAdminAccess(jwt);
-        // StmUser stmUser = jwtUtils.getUserDetail(jwt);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         ObjectMapper mapper = new ObjectMapper();

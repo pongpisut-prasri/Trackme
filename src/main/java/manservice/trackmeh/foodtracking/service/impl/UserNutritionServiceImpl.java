@@ -2,6 +2,7 @@ package manservice.trackmeh.foodtracking.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -17,14 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.SneakyThrows;
 import manservice.trackmeh.foodtracking.dto.request.BasePaginationReq;
+import manservice.trackmeh.foodtracking.dto.request.BaseRequest;
 import manservice.trackmeh.foodtracking.dto.request.NutritionLogsReq;
 import manservice.trackmeh.foodtracking.dto.request.NutritionPlanReq;
+import manservice.trackmeh.foodtracking.dto.request.UserSummaryPaginationReq;
 import manservice.trackmeh.foodtracking.dto.response.BaseResponse;
+import manservice.trackmeh.foodtracking.dto.response.WeeklySummaryResp;
 import manservice.trackmeh.foodtracking.entity.UserModel;
 import manservice.trackmeh.foodtracking.entity.UserNutritionLogs;
 import manservice.trackmeh.foodtracking.entity.UserNutritionPlan;
 import manservice.trackmeh.foodtracking.repository.UserNutritionLogsRepository;
 import manservice.trackmeh.foodtracking.repository.UserNutritionLogsRepository.UserNutritionGroupByUserAndLogDate;
+import manservice.trackmeh.foodtracking.repository.UserNutritionLogsRepository.UserWeeklySummary;
 import manservice.trackmeh.foodtracking.repository.UserNutritionPlanRepository;
 import manservice.trackmeh.foodtracking.service.UserNutritionService;
 
@@ -130,6 +135,23 @@ public class UserNutritionServiceImpl implements UserNutritionService {
     public BaseResponse getLogsPagination(BasePaginationReq req) {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
         return new BaseResponse(userNutritionLogsRepository.getLogsPagination(req.getUserId(), pageable));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BaseResponse getSummaryByRangeDate(UserSummaryPaginationReq req) {
+        Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
+        return new BaseResponse(userNutritionLogsRepository.getSummaryPagination(req.getUserId(), req.getStartDate(),
+                req.getEndDate(), pageable));
+    }
+
+    @Override
+    public BaseResponse getWeeklySummary(BaseRequest req) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+        UserWeeklySummary data = userNutritionLogsRepository.getUserSummary(req.getUserId(), startOfWeek, endOfWeek);
+        return new BaseResponse(new WeeklySummaryResp(startOfWeek, endOfWeek, data));
     }
 
 }

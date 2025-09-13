@@ -3,8 +3,10 @@ package manservice.trackmeh.foodtracking.service;
 import java.time.LocalDate;
 
 import manservice.trackmeh.foodtracking.dto.request.BasePaginationReq;
+import manservice.trackmeh.foodtracking.dto.request.BaseRequest;
 import manservice.trackmeh.foodtracking.dto.request.NutritionLogsReq;
 import manservice.trackmeh.foodtracking.dto.request.NutritionPlanReq;
+import manservice.trackmeh.foodtracking.dto.request.UserSummaryPaginationReq;
 import manservice.trackmeh.foodtracking.dto.response.BaseResponse;
 
 public interface UserNutritionService {
@@ -15,4 +17,7 @@ public interface UserNutritionService {
     public BaseResponse getDailySummaryNutrition(String userId, LocalDate date);
 
     public BaseResponse getLogsPagination(BasePaginationReq req);
+
+    public BaseResponse getSummaryByRangeDate(UserSummaryPaginationReq req);
+    public BaseResponse getWeeklySummary(BaseRequest req);
 }
