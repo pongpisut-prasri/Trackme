@@ -65,8 +65,11 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
                     sum(unl.carbohydrates) as total_carbohydrate,
                     sum(unl.fats) as total_fat from project.user_nutrition_logs unl
                 where unl.user_id =?1       and
-                ( (cast(?2 as date) is null or cast(?3 as date) is null)
-                    or unl.log_date between ?2 and ?3 )
+                (
+                    (cast(?2 as date) is null or cast(?3 as date) is null)
+                    or
+                    (unl.log_date between ?2 and ?3)
+                )
                 group by unl.log_date,unl.user_id
                 order by unl.log_date
             )
@@ -77,12 +80,7 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
             Pageable pageable);
 
     @Query(value = """
-            with body_logs as (
-            	select avg(weight_kg) as weight,user_id from project.user_body_logs ubl
-            	where ubl.measured_at between ?2 and ?3 and ubl.user_id = ?1
-            	group by user_id
-            ),
-            log_data as (
+             with log_data as (
             	select
             	sum(unl.calories) as calories,
             	sum(unl.proteins) as proteins,
@@ -90,18 +88,18 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
             	sum(unl.fats) as fats,
             	user_id
             	from project.user_nutrition_logs unl
-            --	inner join body_logs ubl on unl.user_id = ubl.user_id
             	where unl.user_id =?1 and unl.log_date between ?2 and ?3
-                            	group by unl.user_id, unl.log_date
+                            	group by unl.user_id
             )
             select
-            	avg(ld.fats) as average_fat,
-            		avg(ld.calories) as average_calories,
-            	avg(ld.proteins) as average_protein,
-            	avg(ld.carbohydrates ) as average_carbohydrate,
-            	avg(bl.weight) as average_weight
+            	round(avg(ld.fats),2) as average_fat,
+            	round(avg(ld.calories),2) as average_calories,
+            	round(avg(ld.proteins),2) as average_protein,
+            	round(avg(ld.carbohydrates ),2) as average_carbohydrate,
+            	round(avg(bl.weight_kg),2) as average_weight
             	from log_data ld
-            	inner join body_logs bl on ld.user_id = bl.user_id
+            	inner join project.user_body_logs bl on ld.user_id = bl.user_id and
+            	(bl.measured_at between ?2 and ?3)
                                 """, nativeQuery = true)
     UserWeeklySummary getUserSummary(String userId, LocalDate startOfWeek, LocalDate endOfWeek);
 
