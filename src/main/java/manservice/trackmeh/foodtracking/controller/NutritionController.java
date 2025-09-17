@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -94,6 +95,7 @@ public class NutritionController {
 
     }
 
+    @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
     @PostMapping("/getSummaryByRangeDate")
     public ResponseEntity<?> getSummaryByRangeDate(@RequestHeader("Authorization") String token,
             @RequestBody UserSummaryPaginationReq req) {
@@ -109,6 +111,7 @@ public class NutritionController {
 
     }
 
+    @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
     @PostMapping("/getWeeklySummary")
     public ResponseEntity<?> getWeeklySummary(@RequestHeader("Authorization") String token,
             @RequestBody BaseRequest req) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import manservice.trackmeh.foodtracking.entity.SubscriptionPermission;
+import manservice.trackmeh.foodtracking.entity.UserModel;
+import manservice.trackmeh.foodtracking.repository.SubscriptionPermissionRepository;
 import manservice.trackmeh.foodtracking.service.impl.UserDetailServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -36,8 +40,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   // @Autowired
   // private RolePermissionService rolePermissionService;
 
-  // @Autowired
-  // private EmployeeRepository employeeRepository;
+  @Autowired
+  private SubscriptionPermissionRepository subscriptionPermissionRepository;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -50,11 +54,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserModel userModel = jwtUtils.getUserDetail(jwt);
+
+        SubscriptionPermission subsciptionPermission = subscriptionPermissionRepository
+            .findBySubscriptionType(userModel.getSubscriptionType());
+        List<SimpleGrantedAuthority> authorities = subsciptionPermission.getPermission().stream()
+            .map(o -> new SimpleGrantedAuthority(o)).collect(Collectors.toList());
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        // * set authorized 
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+            authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
