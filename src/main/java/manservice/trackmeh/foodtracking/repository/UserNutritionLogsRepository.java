@@ -89,7 +89,7 @@ public interface UserNutritionLogsRepository extends JpaRepository<UserNutrition
             	user_id
             	from project.user_nutrition_logs unl
             	where unl.user_id =?1 and unl.log_date between ?2 and ?3
-                            	group by unl.user_id
+                            	group by unl.user_id,unl.log_date
             )
             select
             	round(avg(ld.fats),2) as average_fat,

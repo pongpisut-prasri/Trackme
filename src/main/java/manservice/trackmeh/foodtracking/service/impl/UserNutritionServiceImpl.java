@@ -146,8 +146,8 @@ public class UserNutritionServiceImpl implements UserNutritionService {
     }
 
     @Override
-    public BaseResponse getWeeklySummary(BaseRequest req) {
-        LocalDate today = LocalDate.now();
+    public BaseResponse getWeeklySummary(NutritionLogsReq req) {
+        LocalDate today = Optional.ofNullable(req.getStartDate()).orElse(LocalDate.now());
         LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
         LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
         UserWeeklySummary data = userNutritionLogsRepository.getUserSummary(req.getUserId(), startOfWeek, endOfWeek);

@@ -19,4 +19,5 @@ public class NutritionLogsReq extends BaseRequest {
     private BigDecimal fats;
     private BigDecimal calories;
     private LocalDate logDate;
+    private LocalDate startDate;
 }

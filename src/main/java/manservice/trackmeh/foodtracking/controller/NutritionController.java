@@ -95,7 +95,7 @@ public class NutritionController {
 
     }
 
-    @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
+    // @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
     @PostMapping("/getSummaryByRangeDate")
     public ResponseEntity<?> getSummaryByRangeDate(@RequestHeader("Authorization") String token,
             @RequestBody UserSummaryPaginationReq req) {
@@ -111,10 +111,10 @@ public class NutritionController {
 
     }
 
-    @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
+    // @PreAuthorize("hasAuthority('GET_WEEKLY_SUMMARY')")
     @PostMapping("/getWeeklySummary")
     public ResponseEntity<?> getWeeklySummary(@RequestHeader("Authorization") String token,
-            @RequestBody BaseRequest req) {
+            @RequestBody NutritionLogsReq req) {
         try {
             return ResponseEntity.ok().body(userNutritionService.getWeeklySummary(req));
         } catch (Exception e) {

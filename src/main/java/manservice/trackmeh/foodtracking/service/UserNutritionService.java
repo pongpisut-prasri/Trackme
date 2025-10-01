@@ -19,5 +19,5 @@ public interface UserNutritionService {
     public BaseResponse getLogsPagination(BasePaginationReq req);
 
     public BaseResponse getSummaryByRangeDate(UserSummaryPaginationReq req);
-    public BaseResponse getWeeklySummary(BaseRequest req);
+    public BaseResponse getWeeklySummary(NutritionLogsReq req);
 }
