@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 public abstract class BaseEntity implements Serializable {
     @Column(name = "create_by")
     private String createBy;

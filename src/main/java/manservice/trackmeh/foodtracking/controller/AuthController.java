@@ -38,6 +38,7 @@ import manservice.trackmeh.foodtracking.repository.UserNutritionPlanRepository;
 import manservice.trackmeh.foodtracking.security.UserDetailsImpl;
 import manservice.trackmeh.foodtracking.security.jwt.JwtModel;
 import manservice.trackmeh.foodtracking.security.jwt.JwtUtils;
+import manservice.trackmeh.foodtracking.service.impl.UserServiceImpl;
 import manservice.trackmeh.utils.Constant.HTTP_RESPONSE;
 
 @Log4j2
@@ -63,16 +64,17 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
     @PostMapping("/register")
     public BaseResponse register(@Valid @RequestBody UserReq req) {
         try {
-            String passwordEncrypted = passwordEncoder.encode(req.getPassword());
-            UserModel userEntity = new UserModel();
-            userEntity.setUsername(req.getUsername());
-            userEntity.setPasswordEncrypted(passwordEncrypted);
-            userEntity.setCreateDate(LocalDateTime.now());
-            userEntity.setSubscriptionType("FREE");
-            UserModel finalModel = userRepository.save(userEntity);
+            
+            // String passwordEncrypted = passwordEncoder.encode(req.getPassword());
+            // req.setPassword(passwordEncrypted);
+            userServiceImpl.createUser(req);
+            // UserModel finalModel = userRepository.save(userEntity);
 
             // UserNutritionPlan userNutritionPlan = UserNutritionPlan.builder()
             // .userId(finalModel.getId())

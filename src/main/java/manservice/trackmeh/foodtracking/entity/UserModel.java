@@ -20,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_data")
+@SuperBuilder
 public class UserModel extends BaseEntity {
 
     @Id
