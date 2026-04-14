@@ -10,10 +10,10 @@ import manservice.trackmeh.foodtracking.entity.UserModel;
 @Repository
 public interface UserModelRepository extends JpaRepository<UserModel, String> {
 
-    @Query(value = """
-            select * from project.user_data
-            where username = ?1
-            """, nativeQuery = true)
+    // @Query(value = """
+    // select * from project.user_data
+    // where username = ?1
+    // """, nativeQuery = true)
     UserModel findByUserName(String username);
 
 }
