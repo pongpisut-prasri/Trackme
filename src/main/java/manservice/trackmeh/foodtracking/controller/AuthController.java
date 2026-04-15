@@ -70,7 +70,7 @@ public class AuthController {
     @PostMapping("/register")
     public BaseResponse register(@Valid @RequestBody UserReq req) {
         try {
-            
+
             // String passwordEncrypted = passwordEncoder.encode(req.getPassword());
             // req.setPassword(passwordEncrypted);
             userServiceImpl.createUser(req);
@@ -102,19 +102,20 @@ public class AuthController {
             // go to UserDetailServiceImpl.loadByUsername and compare data between request
             // and data from database
             // username and password(encryptedByPasswordEncoder) must be the same value
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(req.getUsername(),
-                            req.getPassword()));
-            // ทำให้ spring secure รู้ว่า user นี้ authenticated แล้ว
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            Object jwt = jwtUtil.generateJwtToken(authentication);
+            // Authentication authentication = authenticationManager.authenticate(
+            // new UsernamePasswordAuthenticationToken(req.getUsername(),
+            // req.getPassword()));
+            // // ทำให้ spring secure รู้ว่า user นี้ authenticated แล้ว
+            // SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Object jwt = jwtUtil.generateJwtToken(authentication);
+            // // authentication = UserDetailServiceImpl.loadByUsername after compare result
+            // line 103
+            // UserDetailsImpl userDetails = (UserDetailsImpl)
+            // authentication.getPrincipal();
+            JwtModel jwtModel = userServiceImpl.login(req);
+            userServiceImpl.updateUserJwt(jwtModel.getUserId(), (String) jwtModel.getToken());
 
-            // authentication = UserDetailServiceImpl.loadByUsername after compare result line 103
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return ResponseEntity.ok(new JwtModel(jwt,
-                    userDetails.getUserModel().getId(),
-                    userDetails.getUserModel().getUsername(),
-                    userDetails.getUserModel().getSubscriptionType()));
+            return ResponseEntity.ok(jwtModel);
         } catch (Exception e) {
             log.error(e, e);
             return ResponseEntity.badRequest().body(BaseResponse

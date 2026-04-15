@@ -14,6 +14,6 @@ public interface UserModelRepository extends JpaRepository<UserModel, String> {
     // select * from project.user_data
     // where username = ?1
     // """, nativeQuery = true)
-    UserModel findByUserName(String username);
+    UserModel findByUsername(String username);
 
 }

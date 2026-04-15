@@ -17,4 +17,15 @@ public class JwtModel {
     private String username;
     // private String password;
     private String subscriptionType;
+    // private String jwt;
+
+    // public JwtModel(Object token,
+    //         String userId,
+    //         String username,
+    //         String subscriptionType) {
+    //     this.token = token;
+    //     this.userId = userId;
+    //     this.username = username;
+    //     this.subscriptionType = subscriptionType;
+    // }
 }

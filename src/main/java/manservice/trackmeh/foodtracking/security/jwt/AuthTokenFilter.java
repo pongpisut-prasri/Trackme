@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import manservice.trackmeh.foodtracking.entity.SubscriptionPermission;
 import manservice.trackmeh.foodtracking.entity.UserModel;
 import manservice.trackmeh.foodtracking.repository.SubscriptionPermissionRepository;
+import manservice.trackmeh.foodtracking.security.UserDetailsImpl;
 import manservice.trackmeh.foodtracking.service.impl.UserDetailServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -53,9 +54,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       String jwt = parseJwt(cachedRequest);
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
         UserModel userModel = jwtUtils.getUserDetail(jwt);
-
+        try {
+          boolean isCurrentJwt = jwtUtils.validateJwtToken(userDetails.getUserModel().getJwt());
+          if (!parseJwt(userDetails.getUserModel().getJwt()).equals(jwt)) {
+            throw new Exception("header jwt is invalid");
+          }
+        } catch (Exception e) {
+          throw new Exception(e.getMessage());
+        }
         SubscriptionPermission subsciptionPermission = subscriptionPermissionRepository
             .findBySubscriptionType(userModel.getSubscriptionType());
         List<SimpleGrantedAuthority> authorities = subsciptionPermission.getPermission().stream()
